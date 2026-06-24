@@ -379,24 +379,22 @@ async function api(path, method='GET', body=null) {
 }
 
 // ── 부서 목록 동적 로드 ──
-async function loadDepartments() {
-  try {
-    const sel = document.getElementById('login-dept');
-    const users = await api('users?select=department&order=department');
-    const depts = [...new Set(users.map(u => u.department).filter(Boolean))].sort();
-    sel.innerHTML = '<option value="">부서 선택</option>';
-    depts.forEach(d => {
-      const o = document.createElement('option');
-      o.value = d; o.textContent = d;
-      sel.appendChild(o);
-    });
-    if (depts.length === 0) {
-      sel.innerHTML = '<option value="">등록된 부서 없음 - 직접 입력</option>';
-    }
-  } catch(e) {
-    const sel = document.getElementById('login-dept');
-    sel.innerHTML = '<option value="">부서 로드 실패 - 새로고침 해주세요</option>';
-  }
+// 조직도(uucorg.html) 전 직원 부서 목록 — 직원 명단이 바뀌면 여기만 갱신
+const ALL_DEPARTMENTS = [
+  '개발사업본부','개발사업팀','건설사업팀','경영사업본부','경영지원처','고객홍보팀',
+  '교통레저처','교통시설팀','국민체육센터팀','기획법무팀','기획홍보실','바라산휴양림팀',
+  '백운스포츠센터팀','부곡스포츠센터팀','사업기획팀','생활체육처','성과평가팀','안전감사팀',
+  '왕송호수레저팀','인사노무팀','임원실','재무회계팀','총무전산팀','포일스포츠센터팀'
+];
+
+function loadDepartments() {
+  const sel = document.getElementById('login-dept');
+  sel.innerHTML = '<option value="">부서 선택</option>';
+  ALL_DEPARTMENTS.forEach(d => {
+    const o = document.createElement('option');
+    o.value = d; o.textContent = d;
+    sel.appendChild(o);
+  });
 }
 
 // ── 로그인 ──
